@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload File</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Загрузка файла</h1>
+        <form id="upload-form" method="POST" enctype="multipart/form-data">
+            <label for="file" class="drop-area">
+                Перетащите файл сюда или кликните для выбора
+                <input type="file" name="file" id="file" class="upload" required>
+            </label>
+            <button type="submit" class="btn">Загрузить</button>
+        </form>
+        <label for="file" class="drop-area">
+            Результат:
+            {% for t in text %}
+            <li>{{ t }}</li>
+            {% endfor %}
+        </label>
+    </div>
+</body>
+</html>
+
