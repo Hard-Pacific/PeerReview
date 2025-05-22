@@ -1,55 +1,44 @@
 import re
-from collections import defaultdict
 
 class Requirement:
-    @staticmethod
-    def check(filename: str, ban: list[str], demand: list[str]):
-        with open(filename, "r", encoding="utf-8") as p:
+    def __init__(self):
+        self.info=None
+    
+    def validate(self, file_path: str, ban: list[str], demand_list: list[str])-> bool:
+        with open(f"{file_path}", "r", encoding = "utf-8") as p:
             file = p.readlines()
-        ban_dict = defaultdict(list)
-        demand_dict = defaultdict(list)
+        ban_list = Requirement.validate_ban(file, ban)
+        demand_list = Requirement.validate_demand(file, demand_list)
+        if len(ban_list) == 0 and len(demand_list) == 0:
+            self.info = ["Код отвечает требованиям преподавателя"]
+            return True
+        else:
+            self.info =["Используется:"] + ban_list + ["Не используется: "] + demand_list
+            return True
+        
+    @staticmethod
+    def validate_ban(file: list[str], ban: list[str])-> list:
+        '''
+        Получает на вход список банов
+        Возвращает список используемых банов
+        '''
+        ban_list=[]
         for line in range(len(file)):
             for command in ban:
                 found = bool(re.search(r"\b{}\b".format(command), file[line]))
                 if found:
-                    ban_dict[line + 1].append(command)
-            for command in demand:
-                found = bool(re.search(r"\b{}\b".format(command), file[line]))
-                if found == True:
-                    demand_dict[command].append(line + 1)
-        ban_str = Requirement.validate_ban(ban_dict)
-        demand_str = Requirement.validate_demand(demand_dict,demand)
-        if ban_str == '' and demand_str == '':
-            return "Success"
-        else:
-            return f"{ban_str} \n{demand_str}"
-        
-    @staticmethod
-    def validate_ban(ban_dict: dict) -> str: 
-        '''
-        Вывод строки,в которой используется command(ban_dict)
-        Ничего, если ban_dict пуст
-        '''
-        #строка для используемых нарушений
-        ban_result_str = ''
-        ban_items= ban_dict.items()
-        if ban_items:
-            ban_result_str = f"Used : {', '.join([f'строка {line}:{commands}' for line, commands in ban_items])}"
-        return ban_result_str
+                    ban_list.append(f"строка {line+1}: {command}")
+        return ban_list
     
     @staticmethod
-    def validate_demand(demand_dict: dict, demand: list[str])-> str:
+    def validate_demand(file: list[str], demand: list[str])-> list:   
         '''
-        Вывод не использованных command(demand_dict)
-        Ничего, если demand_dict пуст
-        '''
-        #строка для не используемых требований
-        demand_result = ''
-        demand_list = []
-        for command in demand:
-            amount = demand_dict[command]
-            if len(amount) == 0:
-                demand_list.append(command)
-        if len(demand_list) != 0:
-            demand_result = f"Not used: {', '.join(demand_list)}"
-        return demand_result
+        Получает на вход список требований
+        Возвращает список не используемых требований
+        '''                  
+        for line in range(len(file)):
+            for command in demand:
+                found = bool(re.search(r"\b{}\b".format(command), file[line]))
+                if found:
+                    demand.remove(command) 
+        return demand                      
