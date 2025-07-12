@@ -1,4 +1,5 @@
 import subprocess
+import re
 
 class Linter:
 
@@ -36,4 +37,10 @@ class Linter:
         else:
             # В файле найдены ошибки
             self.info = result.stdout.decode('utf-8').split("\n")
+            result = []
+            for text in self.info:
+                temp = re.sub(r'^[^:]*:', '', text)
+                result.append(f"{temp}\n") 
+            self.info = result[:-1]
+
             return False
