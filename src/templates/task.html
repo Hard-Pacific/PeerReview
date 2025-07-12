@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Курс PYTHON</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>
+        hljs.highlightAll();
+    </script>
+    
+</head>
+<body>
+    <div class="container">
+    <h1>{{title}}</h1>
+    <p>{{description}}</p>
+        <img src="/static/logo.png" alt="My Logo" style="position:absolute; top:3%; left:5%;" width="17%" height="10%">
+        <div class="container">
+            <h2>Ревью кода</h2>
+            <pre><code>{{code}}</code></pre>
+            <form id="upload-form" method="POST" enctype="multipart/form-data">
+                <label for="file" class="drop-area">
+                    Перетащите файл сюда или кликните для выбора
+                    <input type="file" name="file" id="file" class="upload" required>
+                </label>
+                <button type="submit" class="btn">Загрузить</button>
+            </form>
+            <label for="file" class="drop-area">
+                Результат:
+                {% for t in text %}
+                <li>{{ t }}</li>
+                {% endfor %}
+            </label>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание заданий</title>
+    <style>/* Общие стили */
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f2f4f7;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* Контейнер */
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Заголовок и кнопка */
+h1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.plus-button {
+    background-color: #28a745;
+    border: none;
+    color: white;
+    font-size: 20px;
+    padding: 6px 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.plus-button:hover {
+    background-color: #218838;
+}
+
+/* Форма */
+form {
+    margin-bottom: 30px;
+}
+
+form input[type="text"],
+form textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+form textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+form button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Список заданий */
+.task-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.task-item {
+    padding: 16px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.task-item h3 {
+    margin: 0 0 10px;
+    font-size: 20px;
+}
+
+.task-item p {
+    margin: 0 0 8px;
+    color: #555;
+}
+
+.task-item small {
+    color: #777;
+}
+</style>
+    <script>
+        function toggleForm() {
+            const form = document.getElementById('task-form');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            Создание заданий
+            <button class="plus-button" onclick="toggleForm()">➕</button>
+        </h1>
+
+        <form id="task-form" method="POST" style="display: none;">
+            <input type="text" name="title" placeholder="Название задания" required>
+            <textarea name="description" placeholder="Описание задания" required></textarea>
+            <input type="text" name="answers" placeholder="Правильные ответы (опционально)">
+            <input type="text" name="banned" placeholder="Запрещённые методы/операторы (опционально)">
+            <button type="submit">Создать</button>
+        </form>
+
+        <ul class="task-list">
+            {% for task in tasks %}
+                <li class="task-item">
+                    <h3>{{ task['title'] }}</h3>
+                    <p>{{ task['description'] }}</p>
+                    {% if task['output'] %}
+                        <small><strong>Ответы:</strong> {{ task['output'] }}</small><br>
+                    {% endif %}
+                    {% if task['demand_list'] %}
+                        <small><strong>Запрещено:</strong> {{ task['demand_list'] }}</small>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
