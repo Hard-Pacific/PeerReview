@@ -125,8 +125,6 @@ class UniversalTester:
         return results
     
 
-
-    
 tester = UniversalTester()
 
-print(tester.test_all({"2":"4","1":"1"}))
+print(tester.test_all({"2":"4","1":"1","3":"9"}))  # Проверка квадратов чисел
