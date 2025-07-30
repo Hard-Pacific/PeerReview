@@ -4,10 +4,10 @@ class Requirement:
     def __init__(self):
         self.info=None
     
-    def validate(self, file_path: str, ban: list[str], demand_list: list[str])-> bool:
+    def validate(self, file_path: str, ban_list: list[str], demand_list: list[str])-> bool:
         with open(f"{file_path}", "r", encoding = "utf-8") as p:
             file = p.readlines()
-        ban_list = Requirement.validate_ban(file, ban)
+        ban_list = Requirement.validate_ban(file, ban_list)
         demand_list = Requirement.validate_demand(file, demand_list)
         if len(ban_list) == 0 and len(demand_list) == 0:
             self.info = ["Код отвечает требованиям преподавателя"]

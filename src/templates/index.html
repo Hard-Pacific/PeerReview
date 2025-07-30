@@ -1,28 +1,32 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload File</title>
-    <link rel="stylesheet" href="/static/style.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Загрузка файла</h1>
-        <form id="upload-form" method="POST" enctype="multipart/form-data">
-            <label for="file" class="drop-area">
-                Перетащите файл сюда или кликните для выбора
-                <input type="file" name="file" id="file" class="upload" required>
-            </label>
-            <button type="submit" class="btn">Загрузить</button>
-        </form>
-        <label for="file" class="drop-area">
-            Результат:
-            {% for t, in text %}
-            <li>{{ t }}</li>
-            {% endfor %}
-        </label>
-    </div>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Upload File</title>
+        <link rel="stylesheet" href="/static/style.css">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+        <script>
+            hljs.highlightAll();
+        </script>
+    </head>
+    <header>
+        <div class="container" width="100%">
+            <nav>
+                <a href="allcourses">Все курсы</a>
+                <a href="mycourses">Мои курсы</a>
+                <a href="new">Создать курс</a>
+                {%if username%}
+                <a href="register">{{username}}</a>
+                {% endif %}
+            </nav>
+        </div>
+    
+    </header>
+    <body>
+        <img src="/static/logo.png" alt="My Logo" style="position:absolute; top:3%; left:5%;" width="17%" height="10%">
+
+    </body>
 </html>
 
