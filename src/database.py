@@ -246,7 +246,7 @@ class EducationDB:
             except sq.IntegrityError:
                 return False
 
-    def delete_course(self, course_title: int) -> bool:
+    def delete_course(self, course_title: str) -> bool:
 
         """Деактивирует курс"""
 
@@ -257,7 +257,7 @@ class EducationDB:
             """, (course_title,))
             return cursor.rowcount > 0
 
-    def update_course(self, course_title: int, **kwargs) -> bool:
+    def update_course(self, course_title: str, **kwargs) -> bool:
 
         """Обновляет информацию о курсе"""
 
@@ -289,7 +289,7 @@ class EducationDB:
             print(f"Ошибка при обновлении курса: {e}")
             return False
 
-    def get_course(self, course_title: int) -> Optional[Dict]:
+    def get_course(self, course_title: str) -> Optional[Dict]:
 
         """Возвращает данные курса по ID"""
 
@@ -404,7 +404,9 @@ class EducationDB:
     def add_task(self, course_title: str, task_title: str, 
                 input_data: str, output_data: str,
                 description: Optional[str] = None) -> bool:
+        
         """Добавляет новое задание в курс"""
+        
         with self._get_connection() as con:
             cursor = con.cursor()
             cursor.execute("SELECT title FROM courses WHERE title = ?;", (course_title,))
@@ -443,11 +445,11 @@ class EducationDB:
                 'requirements ': row[4]
             } for row in cursor.fetchall()]
 
-    def delete_task(self, task_title: int) -> bool:
+    def delete_task(self, task_title: str) -> bool:
         """Удаляет задание по ID"""
         with self._get_connection() as con:
             cursor = con.cursor()
-            cursor.execute("DELETE FROM tasks WHERE task_title = ?;", (task_title,))
+            cursor.execute("DELETE FROM tasks WHERE title = ?;", (task_title,))
             con.commit()
             return cursor.rowcount > 0
 
@@ -523,4 +525,4 @@ data = EducationDB()
 # data.add_task_requirements("algosy", "sum", ["if","while"], ["for"])
 # print(data.get_all_courses())
 # print(data.get_course_tasks("algosy"))
-data.mark_task_completed("student1","algosy","sum")
+# data.mark_task_completed("student1","algosy","sum")
