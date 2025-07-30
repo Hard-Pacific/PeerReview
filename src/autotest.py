@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Dict, List, Optional
 import os
 
-class UniversalTester:
+class AutoTest:
     """Универсальный тестер для программ с вводом/выводом и только выводом"""
     
     LANGUAGE_CONFIG = {
@@ -125,6 +125,6 @@ class UniversalTester:
         return results
     
 
-tester = UniversalTester()
+tester = AutoTest()
 
 # print(tester.test_all({"2":"4","1":"1","3":"9"}))  # Проверка квадратов чисел
