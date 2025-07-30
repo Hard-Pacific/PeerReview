@@ -127,4 +127,4 @@ class UniversalTester:
 
 tester = UniversalTester()
 
-print(tester.test_all({"2":"4","1":"1","3":"9"}))  # Проверка квадратов чисел
+# print(tester.test_all({"2":"4","1":"1","3":"9"}))  # Проверка квадратов чисел
