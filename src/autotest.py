@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Dict, List, Optional
 import os
 
+
 class AutoTest:
     """Универсальный тестер для программ с вводом/выводом и только выводом"""
     

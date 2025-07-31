@@ -1,5 +1,6 @@
 import re
 
+
 class Requirement:
     def __init__(self):
         self.info=None
@@ -18,10 +19,11 @@ class Requirement:
         
     @staticmethod
     def validate_ban(file: list[str], ban: list[str])-> list:
-        '''
+        """
         Получает на вход список банов
         Возвращает список используемых банов
-        '''
+        """
+ 
         ban_list=[]
         for line in range(len(file)):
             for command in ban:
@@ -32,10 +34,10 @@ class Requirement:
     
     @staticmethod
     def validate_demand(file: list[str], demand: list[str])-> list:   
-        '''
+        """
         Получает на вход список требований
         Возвращает список не используемых требований
-        '''                  
+        """                  
         for line in range(len(file)):
             for command in demand:
                 found = bool(re.search(r"\b{}\b".format(command), file[line]))

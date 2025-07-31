@@ -45,6 +45,7 @@ class Linter:
             return False
 
     def prettier(error_list: list, file_extension: str):
+        
         if file_extension == "py":
             pattern = r"(.+?):(\d+):(\d+): (.+)"
             group1 = 2
@@ -61,12 +62,12 @@ class Linter:
         return result
 
 
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Необходимо указать путь к файлу")
-        sys.exit(1)
+# if __name__ == "__main__":
+#     if len(sys.argv) != 2:
+#         print("Необходимо указать путь к файлу")
+#         sys.exit(1)
 
-    file_path = sys.argv[1]
-    file = Linter()
-    file.validate(file_path)
-    print(file.info)
+#     file_path = sys.argv[1]
+#     file = Linter()
+#     file.validate(file_path)
+#     print(file.info)
