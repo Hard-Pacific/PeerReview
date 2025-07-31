@@ -43,7 +43,7 @@ class EducationDB:
                     description TEXT,
                     input_data TEXT,
                     output_data TEXT,
-                    requirements TEXT,
+                    demand_list TEXT,
                     FOREIGN KEY (course_title) REFERENCES courses(title) ON DELETE CASCADE
                 );
             """)
@@ -350,7 +350,7 @@ class EducationDB:
             """, (user_login, course_title, task_title))
             con.commit()
 
-    def add_task_requirements(self, course_title: str, task_title: str, 
+    def add_task_demand_list(self, course_title: str, task_title: str, 
                             ban: list[str], demand: list[str]) -> None:
         """
         Добавляет требования к конкретному заданию
@@ -361,7 +361,7 @@ class EducationDB:
         :param demand: Список обязательных элементов
         """
         # Сериализуем требования в JSON
-        requirements = json.dumps({
+        demand_list = json.dumps({
             "ban": ban,
             "demand": demand
         })
@@ -369,16 +369,16 @@ class EducationDB:
         with self._get_connection() as con:
             con.execute("""
                 UPDATE tasks
-                SET requirements = ?
+                SET demand_list = ?
                 WHERE course_title = ? AND title = ?
-            """, (requirements, course_title, task_title))
+            """, (demand_list, course_title, task_title))
             
             if con.total_changes == 0:
                 raise ValueError("Задание не найдено")
             
             con.commit()
 
-    def get_task_requirements(self, course_title: str, task_title: str) -> tuple[list[str], list[str]]:
+    def get_task_demand_list(self, course_title: str, task_title: str) -> tuple[list[str], list[str]]:
         """
         Возвращает требования задания
         
@@ -389,7 +389,7 @@ class EducationDB:
         with self._get_connection() as con:
             cursor = con.cursor()
             cursor.execute("""
-                SELECT requirements
+                SELECT demand_list
                 FROM tasks
                 WHERE course_title = ? AND title = ?
             """, (course_title, task_title))
@@ -404,10 +404,12 @@ class EducationDB:
 
     def add_task(self, course_title: str, task_title: str, 
                 input_data: str, output_data: str,
-                description: Optional[str] = None) -> bool:
+                description: Optional[str] = None, demand_list: json = None) -> bool:
         
         """Добавляет новое задание в курс"""
         
+ 
+
         with self._get_connection() as con:
             cursor = con.cursor()
             cursor.execute("SELECT title FROM courses WHERE title = ?;", (course_title,))
@@ -415,7 +417,7 @@ class EducationDB:
             
             if not course:
                 return False
-                
+            
             try:
                 con.execute(
                     """INSERT INTO tasks 
@@ -423,6 +425,15 @@ class EducationDB:
                     VALUES (?, ?, ?, ?, ?);""",
                     (course[0], task_title, description, input_data, output_data)
                 )
+                con.execute("""
+                UPDATE tasks
+                SET demand_list = ?
+                WHERE course_title = ? AND title = ?
+                """, (demand_list, course_title, task_title))
+            
+                if con.total_changes == 0:
+                    raise ValueError("Задание не найдено")
+                
                 return True
             except sq.IntegrityError:
                 return False
@@ -432,7 +443,7 @@ class EducationDB:
         with self._get_connection() as con:
             cursor = con.cursor()
             cursor.execute("""
-                SELECT title, description, input_data, output_data, requirements 
+                SELECT title, description, input_data, output_data, demand_list 
                 FROM tasks
                 WHERE course_title = ?;
             """, (course_title,))
@@ -443,7 +454,7 @@ class EducationDB:
                 'description': row[1],
                 'input': row[2],
                 'output': row[3],
-                'requirements ': row[4]
+                'demand_list ': row[4]
             } for row in cursor.fetchall()]
 
     def delete_task(self, task_title: str) -> bool:
@@ -456,7 +467,7 @@ class EducationDB:
 
     def update_task(self, task_title: int, **kwargs) -> bool:
         """Обновляет данные задания"""
-        allowed_fields = {'title', 'description', 'input_data', 'output_data', 'requirements'}
+        allowed_fields = {'title', 'description', 'input_data', 'output_data', 'demand_list'}
         updates = []
         params = []
         
@@ -523,7 +534,7 @@ data = EducationDB()
 # data.add_course("python", "teacher1")
 # data.register_for_course('student1', ["algosy","python"])
 # data.add_task("algosy", "sum", "1 2 3", "6")
-# data.add_task_requirements("algosy", "sum", ["if","while"], ["for"])
+# data.add_task_demand_list("algosy", "sum", ["if","while"], ["for"])
 # print(data.get_all_courses())
 # print(data.get_course_tasks("algosy"))
 # data.mark_task_completed("student1","algosy","sum")
